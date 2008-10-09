@@ -1,4 +1,5 @@
-{{{class Question 
+{{{
+class Question 
 getMonkeys() : List 
 getCorrectMonkeyId() : int 
 getQuestionImage() : QuestionImage
@@ -11,4 +12,5 @@ class Monkey extends GameImage
 class QuestionImage extends GameImage
 
 interface QuestionProvider 
-createQuestion() : Question}}}
+createQuestion() : Question
+}}}
