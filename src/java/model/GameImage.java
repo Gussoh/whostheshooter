@@ -5,10 +5,14 @@
 
 package model;
 
+import java.nio.ByteBuffer;
+
 /**
  *
  * @author Gussoh
  */
 public class GameImage {
-
+    public ByteBuffer getImageData() {
+        return null;
+    }
 }
