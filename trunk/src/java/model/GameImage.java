@@ -12,6 +12,10 @@ import java.nio.ByteBuffer;
  * @author Gussoh
  */
 public class GameImage {
+
+    protected GameImage() {
+    }
+    
     public ByteBuffer getImageData() {
         return null;
     }

@@ -12,6 +12,10 @@ import java.util.List;
  * @author Gussoh
  */
 public class Question {
+
+    protected Question() {
+    }
+    
     public List<Monkey> getMonkeys() {
         return null;
     }
