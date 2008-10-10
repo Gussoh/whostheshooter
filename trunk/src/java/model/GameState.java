@@ -34,6 +34,9 @@ public class GameState {
      * @param answer
      */
     public void answerQuestionAndCreateNext(int answer) {
+        if(answer < 0 || answer >= getCurrentQuestion().getMonkeys().size()) {
+            throw new IllegalStateException("Illegal answer index.");
+        }
         if(isGameFinished()) {
             throw new IllegalStateException("Cannot answer question. Game already finished.");
         }

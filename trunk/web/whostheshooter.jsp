@@ -9,11 +9,16 @@
 
 <%@ page import="model.*" %>
 <%
-            Object data = session.getAttribute("question");
-            Question question = null;
+            Object data = session.getAttribute(controller.WhoIsTheShooter.ATTRIBUTE_GAME_STATE);
+            GameState gameState = null;
             if (data != null) {
-                question = (Question) data;
+                gameState = (GameState) data;
             } else {
+                // FAIL - SHOW ERROR MESSAGE AND DIE
+                out.print("<h1>EPIC FAIL</h1>");
+                return;
+            }
+            if(gameState.getCurrentQuestion() == null) {
                 // FAIL - SHOW ERROR MESSAGE AND DIE
                 out.print("<h1>EPIC FAIL</h1>");
                 return;
@@ -27,15 +32,15 @@
     </head>
     <body>
         <form action="" method="post" name="guess">
-            <input type="hidden" name="monkey"/>
+            <input type="hidden" name="<%=controller.WhoIsTheShooter.PARAMETER_ANSWER %>"/>
         </form>
         <h1>Click on the user you think captured this photograph</h1>
         <div class="image"><img src="image.jsp" alt="who captured this?"/></div>
         <div class="monkeys">
             <%
             int i = 0;
-            for (Monkey m : question.getMonkeys()) {
-                out.println("<img src=\"image.jsp?i="+ i +"\" alt=\"this one?\" onClick=\"document.guess.monkey.value = '" + i + "'; document.guess.submit();\" />");
+            for (Monkey m : gameState.getCurrentQuestion().getMonkeys()) {
+                out.println("<img src=\"image.jsp?" + controller.WhoIsTheShooter.PARAMETER_ANSWER + "="+ i +"\" alt=\"this one?\" onClick=\"document.guess." + controller.WhoIsTheShooter.PARAMETER_ANSWER + ".value = '" + i + "'; document.guess.submit();\" />");
                 i++;
             }
             %>
