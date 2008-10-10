@@ -51,7 +51,23 @@ public class GameState {
         }
         return questions.get(currentQuestion);
     }
+    
+    /**
+     * Returns current question index. starts at 0.
+     * @return the index.
+     */
+    public int getCurrentQuestionIndex() {
+        return currentQuestion;
+    }
 
+    /**
+     * 
+     * @return total number of questions to be answered before the game is finished.
+     */
+    public int getNumQuestions() {
+        return numQuestions;
+    }
+    
     /**
      * 
      * @return true if game is finished, otherwise false.

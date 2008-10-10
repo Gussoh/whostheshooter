@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package model;
 
 import java.util.List;
@@ -13,18 +12,25 @@ import java.util.List;
  */
 public class Question {
 
-    protected Question() {
+    private List<Monkey> monkeys;
+    private int correctMonkeyIndex;
+    private QuestionImage questionImage;
+
+    protected Question(List<Monkey> monkeys, int correctMonkeyIndex, QuestionImage questionImage) {
+        this.monkeys = monkeys;
+        this.correctMonkeyIndex = correctMonkeyIndex;
+        this.questionImage = questionImage;
     }
-    
+
+    public int getCorrectMonkeyIndex() {
+        return correctMonkeyIndex;
+    }
+
     public List<Monkey> getMonkeys() {
-        return null;
+        return monkeys;
     }
-    
-    public int getCorrectMonkeyId() {
-        return 0;
-    }
-    
+
     public QuestionImage getQuestionImage() {
-        return null;
+        return questionImage;
     }
 }

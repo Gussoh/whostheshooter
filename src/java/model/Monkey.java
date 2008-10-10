@@ -5,10 +5,15 @@
 
 package model;
 
+import java.nio.ByteBuffer;
+
 /**
  *
  * @author Gussoh
  */
 public class Monkey extends GameImage {
 
+    public Monkey(ByteBuffer imageData, int width, int height) {
+        super(imageData, width, height);
+    }
 }
