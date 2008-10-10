@@ -1,19 +1,14 @@
 <%-- 
     Document   : index
-    Created on : 2008-okt-09, 22:07:38
-    Author     : Gussoh
+    Created on : Oct 10, 2008, 4:03:47 PM
+    Author     : p62287946
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
 
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Who's the shooter?</title>
-        <style></style>
-    </head>
-    <body>
-        <h2>Hello World!</h2>
-    </body>
-</html>
+<% 
+pageContext.forward("whostheshooter");
+//response.addHeader("Location:", arg1)
+%>
