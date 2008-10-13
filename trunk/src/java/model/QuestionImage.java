@@ -15,13 +15,14 @@ import java.nio.ByteBuffer;
  */
 public class QuestionImage extends GameImage {
 
-    public QuestionImage(URL location, int width, int height) throws IOException {
-        super(location, width, height);
+    public QuestionImage(URL location) throws IOException {
+        super(location);
     }
 
-    public QuestionImage(ByteBuffer imageData, String contentType, int width, int height) {
-        super(imageData, contentType, width, height);
+    public QuestionImage(ByteBuffer imageData, String contentType) {
+        super(imageData, contentType);
     }
+
 
     
 }
