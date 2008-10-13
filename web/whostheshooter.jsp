@@ -35,12 +35,12 @@
             <input type="hidden" name="<%=controller.WhoIsTheShooter.PARAMETER_ANSWER %>"/>
         </form>
         <h1>Click on the user you think captured this photograph</h1>
-        <div class="image"><img src="image.jsp" alt="who captured this?"/></div>
+        <div class="image"><img src="image" alt="who captured this?"/></div>
         <div class="monkeys">
             <%
             int i = 0;
             for (Monkey m : gameState.getCurrentQuestion().getMonkeys()) {
-                out.println("<img src=\"image.jsp?" + controller.WhoIsTheShooter.PARAMETER_ANSWER + "="+ i +"\" alt=\"this one?\" onClick=\"document.guess." + controller.WhoIsTheShooter.PARAMETER_ANSWER + ".value = '" + i + "'; document.guess.submit();\" />");
+                out.println("<img src=\"image?" + controller.WhoIsTheShooter.PARAMETER_ANSWER + "="+ i +"\" alt=\"this one?\" onClick=\"document.guess." + controller.WhoIsTheShooter.PARAMETER_ANSWER + ".value = '" + i + "'; document.guess.submit();\" />");
                 i++;
             }
             %>

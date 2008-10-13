@@ -19,32 +19,26 @@ import java.nio.ByteBuffer;
 public class GameImage {
 
     private ByteBuffer imageData;
-    private int width = UNKNOWN,  height = UNKNOWN;
     private String contentType;
-    public static final int UNKNOWN = Integer.MIN_VALUE;
+    private int size;
 
     /**
      * 
      * @param imageData raw image data encoded according to the contentType
      * @param contentType the mime type of the image. image/jpeg or image/gif for example.
-     * @param width width of image in pixels. set to GameImage.UNKNOWN for unknown
-     * @param height height of image in pixels. set to GameImage.UNKNOWN for unknown
      */
-    protected GameImage(ByteBuffer imageData, String contentType, int width, int height) {
+    protected GameImage(ByteBuffer imageData, String contentType) {
         this.imageData = imageData;
-        this.width = width;
-        this.height = height;
         this.contentType = contentType;
+        size = imageData.capacity();
     }
 
     /**
      * Files can have a maximum size of Integer.MAX_VALUE bytes
      * @param location location of the file.
-     * @param width width of image in pixels. set to GameImage.UNKNOWN for unknown
-     * @param height height of image in pixels. set to GameImage.UNKNOWN for unknown
      * @throws IOException when error fetching the image
      */
-    protected GameImage(URL location, int width, int height) throws IOException {
+    protected GameImage(URL location) throws IOException {
 
         URLConnection connection = location.openConnection();
         InputStream in = new BufferedInputStream(connection.getInputStream());
@@ -55,25 +49,24 @@ public class GameImage {
             arrayOutputStream.write(data);
         }
 
-        ByteBuffer.wrap(arrayOutputStream.toByteArray());
+        imageData = ByteBuffer.wrap(arrayOutputStream.toByteArray());
 
         contentType = connection.getContentType();
         in.close();
+        size = imageData.capacity();
     }
 
     public ByteBuffer getImageData() {
         return imageData;
     }
 
-    public int getHeight() {
-        return height;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
     public String getContentType() {
         return contentType;
     }
+
+    public int getSize() {
+        return size;
+    }
+    
+    
 }

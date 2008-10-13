@@ -5,7 +5,6 @@ package controller;
  * and open the template in the editor.
  */
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,10 +12,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.GameState;
-import model.Question;
 import model.QuestionProvider;
 import model.TestQuestionProvider;
-import org.apache.catalina.Session;
 
 /**
  *

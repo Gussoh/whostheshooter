@@ -27,7 +27,8 @@ import java.util.List;
 public class FlickrQuestionProvider implements QuestionProvider {
     private static RequestContext requestContext;
     public Question createQuestion() {
-        
+        return null;
+        /*
          List<Monkey> monkeys = new LinkedList<Monkey>();
         for (int i = 0; i < 4; i++) 
             monkeys.add(new Monkey(ByteBuffer.allocate(0), 200, 200));
@@ -71,7 +72,7 @@ public class FlickrQuestionProvider implements QuestionProvider {
        
         ByteBuffer buf = ByteBuffer.wrap(resultImageAsRawBytes);
         QuestionImage qi = new QuestionImage(buf, 400, 300);
-        return new Question(monkeys, 3, qi);
+        return new Question(monkeys, 3, qi);*/
     }
 
 }
