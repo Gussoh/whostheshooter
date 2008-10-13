@@ -5,6 +5,8 @@
 
 package model;
 
+import java.io.IOException;
+import java.net.URL;
 import java.nio.ByteBuffer;
 
 /**
@@ -13,7 +15,13 @@ import java.nio.ByteBuffer;
  */
 public class Monkey extends GameImage {
 
-    public Monkey(ByteBuffer imageData, int width, int height) {
-        super(imageData, width, height);
+    public Monkey(URL location, int width, int height) throws IOException {
+        super(location, width, height);
     }
+
+    public Monkey(ByteBuffer imageData, String contentType, int width, int height) {
+        super(imageData, contentType, width, height);
+    }
+
+    
 }
