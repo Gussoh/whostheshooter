@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import model.FlickrQuestionProvider;
 import model.GameState;
 import model.QuestionProvider;
 import model.TestQuestionProvider;
@@ -21,7 +22,7 @@ import model.TestQuestionProvider;
  */
 public class WhoIsTheShooter extends HttpServlet {
 
-    private QuestionProvider questionProvider = new TestQuestionProvider();
+    private QuestionProvider questionProvider = new FlickrQuestionProvider();
     public static final String ATTRIBUTE_GAME_STATE = "GameState";
     public static final String PARAMETER_ANSWER = "a";
 
