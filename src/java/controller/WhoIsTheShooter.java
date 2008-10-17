@@ -26,8 +26,10 @@ public class WhoIsTheShooter extends HttpServlet {
 
     private QuestionProvider questionProvider = new FlickrQuestionProvider();
     public static final String ATTRIBUTE_GAME_STATE = "GameState";
-    public static final String PARAMETER_ANSWER = "a";
     public static final String ATTRIBUTE_CHECK = "Check";
+    
+    public static final String PARAMETER_ANSWER = "a";
+    public static final String PARAMETER_INVALIDATE = "invalidate";
 
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -37,41 +39,56 @@ public class WhoIsTheShooter extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
+
+        if(request.getParameter(PARAMETER_INVALIDATE) != null) {
+            session.removeAttribute(ATTRIBUTE_GAME_STATE);
+        }
+        
         Object data = session.getAttribute(ATTRIBUTE_GAME_STATE);
         GameState gameState;
-        if( data == null) {
+
+        // First time
+        if (data == null) {
             try {
-                gameState = new GameState(questionProvider, 10);
+                gameState = new GameState(questionProvider, 2);
+                session.setAttribute(ATTRIBUTE_CHECK, Integer.toHexString((int) (Math.random() * Integer.MAX_VALUE)));
             } catch (QuestionProviderException ex) {
-                forwardToErrorPage(ex, request, response);
+                showErrorPage(ex, request, response);
                 return;
             }
             session.setAttribute(ATTRIBUTE_GAME_STATE, gameState);
         } else {
             gameState = (GameState) data;
         }
-        
+
         String answer = request.getParameter(PARAMETER_ANSWER);
-        if(answer != null) {
-            try{ 
+        String check = request.getParameter(ATTRIBUTE_CHECK);
+
+        // If user tries to answer and the checkId is correct 
+        if (answer != null && check != null && check.equals(session.getAttribute(ATTRIBUTE_CHECK))) {
+            try {
                 int answerIndex = Integer.parseInt(answer);
+
                 try {
                     gameState.answerQuestionAndCreateNext(answerIndex);
                     session.setAttribute(ATTRIBUTE_CHECK, Integer.toHexString((int) (Math.random() * Integer.MAX_VALUE)));
                 } catch (QuestionProviderException ex) {
-                    forwardToErrorPage(ex, request, response);
+                    showErrorPage(ex, request, response);
                     return;
                 }
-                showGamePage(request, response);
             } catch (NumberFormatException numberFormatException) {
                 request.getSession().invalidate();
-                forwardToErrorPage(numberFormatException, request, response);
+                showErrorPage(numberFormatException, request, response);
+                return;
             }
+        }
+
+        if (gameState.isGameFinished()) {
+            System.out.println(gameState);
+            showScorePage(request, response);
         } else {
             showGamePage(request, response);
         }
-            
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -102,14 +119,19 @@ public class WhoIsTheShooter extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private void forwardToErrorPage(Exception exception, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void showErrorPage(Exception exception, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         exception.printStackTrace();
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/error.jsp");
+        RequestDispatcher dispatcher = getServletContext().getNamedDispatcher("errorPage");
         dispatcher.forward(request, response);
     }
 
     private void showGamePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/whostheshooter.jsp");
+        RequestDispatcher dispatcher = getServletContext().getNamedDispatcher("gamePage");
+        dispatcher.forward(request, response);
+    }
+
+    private void showScorePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher dispatcher = getServletContext().getNamedDispatcher("scorePage");
         dispatcher.forward(request, response);
     }
 }

@@ -8,6 +8,18 @@
         <servlet-name>whostheshooter</servlet-name>
         <servlet-class>controller.WhoIsTheShooter</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>errorPage</servlet-name>
+        <jsp-file>/WEB-INF/jspf/error.jspf</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>gamePage</servlet-name>
+        <jsp-file>/WEB-INF/jspf/whostheshooter.jspf</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>scorePage</servlet-name>
+        <jsp-file>/WEB-INF/jspf/score.jspf</jsp-file>
+    </servlet>
     <servlet-mapping>
         <servlet-name>image</servlet-name>
         <url-pattern>/image</url-pattern>

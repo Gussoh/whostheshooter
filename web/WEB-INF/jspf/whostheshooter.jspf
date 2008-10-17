@@ -11,7 +11,10 @@ response.setHeader("Expires", "Sat, 26 Jul 1997 05:00:00 GMT");
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
 <%@ page import="model.*" %>
 <%
-            Object data = session.getAttribute(controller.WhoIsTheShooter.ATTRIBUTE_GAME_STATE);
+            // Page can no longer be accessed through an URL. 
+            // Only forwarded here from servlet
+
+            /*Object data = session.getAttribute(controller.WhoIsTheShooter.ATTRIBUTE_GAME_STATE);
             GameState gameState = null;
             if (data != null) {
                 gameState = (GameState) data;
@@ -24,7 +27,8 @@ response.setHeader("Expires", "Sat, 26 Jul 1997 05:00:00 GMT");
                 // FAIL - SHOW ERROR MESSAGE AND DIE
                 out.print("<h1>EPIC FAIL</h1>");
                 return;
-            }
+            }*/
+            GameState gameState = (GameState) session.getAttribute(controller.WhoIsTheShooter.ATTRIBUTE_GAME_STATE);
 %>
 
 <html>
@@ -33,9 +37,10 @@ response.setHeader("Expires", "Sat, 26 Jul 1997 05:00:00 GMT");
         <title>Who's the monkey?</title>
     </head>
     <body>
+        <div>Question <%= gameState.getCurrentQuestionIndex() + 1 %> of <%= gameState.getNumQuestions() %> </div>
         <form action="" method="post" name="guess">
             <input type="hidden" name="<%=controller.WhoIsTheShooter.PARAMETER_ANSWER %>"/>
-            <input type="hidden" name="check" value="<%= session.getAttribute(controller.WhoIsTheShooter.ATTRIBUTE_CHECK) %>"/>
+            <input type="hidden" name="<%=controller.WhoIsTheShooter.ATTRIBUTE_CHECK %>" value="<%= session.getAttribute(controller.WhoIsTheShooter.ATTRIBUTE_CHECK) %>"/>
         </form>
         <h1>Click on the user you think captured this photograph</h1>
         <div class="image"><img src="image" alt="who captured this?"/></div>
