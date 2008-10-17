@@ -15,14 +15,15 @@ import java.nio.ByteBuffer;
  */
 public class Monkey extends GameImage {
 
-    public Monkey(URL location) throws IOException {
-        super(location);
-    }
-
-    public Monkey(ByteBuffer imageData, String contentType) {
-        super(imageData, contentType);
-    }
-
-
+    private URL profile;
     
+    public Monkey(URL location, URL profile) throws IOException {
+        super(location);
+        this.profile = profile;
+    }
+
+    public Monkey(ByteBuffer imageData, String contentType, URL profile) {
+        super(imageData, contentType);
+        this.profile = profile;
+    }
 }
