@@ -8,6 +8,7 @@ package model;
 import com.aetrion.flickr.Flickr;
 import com.aetrion.flickr.FlickrException;
 import com.aetrion.flickr.RequestContext;
+import com.aetrion.flickr.people.User;
 import com.aetrion.flickr.photos.Photo;
 import com.aetrion.flickr.photos.PhotoList;
 import com.aetrion.flickr.photos.PhotosInterface;
@@ -42,11 +43,18 @@ public class test {
         PhotoList photoList = photosInterface.getRecent(1, 1);
         Photo photo;
                 
-        if(!photoList.isEmpty())
-        {
+        //if(!photoList.isEmpty())
+        //{
             photo = (Photo)photoList.get(0); 
-            String photoUrl = photo.getUrl();
+            String photoUrl = photo.getMediumUrl();
+            User photoOwner = photo.getOwner();
+            System.out.println(photoOwner.getId());
+        photoOwner.setIconFarm(2);
+        photoOwner.setIconServer(2);
+        String ownerIconUrl = photoOwner.getBuddyIconUrl();
+            System.out.println(photoOwner.getIconFarm());
             System.out.println(photoUrl);
+            System.out.println(ownerIconUrl);
             
             BufferedImage photoImage = photosInterface.getImage(photoUrl);
             
@@ -58,8 +66,6 @@ public class test {
             byte[] resultImageAsRawBytes = baos.toByteArray();
 
             baos.close();         
-        }       
-    }
-    
-    
+        //}       
+    } 
 }
