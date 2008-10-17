@@ -15,12 +15,16 @@ import java.nio.ByteBuffer;
  */
 public class QuestionImage extends GameImage {
 
-    public QuestionImage(URL location) throws IOException {
+    private URL webPage;
+    
+    public QuestionImage(URL location, URL webPage) throws IOException {
         super(location);
+        this.webPage = webPage;
     }
 
-    public QuestionImage(ByteBuffer imageData, String contentType) {
+    public QuestionImage(ByteBuffer imageData, String contentType, URL webPage) {
         super(imageData, contentType);
+        this.webPage = webPage;
     }
 
 
