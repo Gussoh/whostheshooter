@@ -4,51 +4,35 @@
     Author     : p62287946
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%
-response.setHeader("Cache-Control", "no-cache, must-revalidate");
-response.setHeader("Expires", "Sat, 26 Jul 1997 05:00:00 GMT"); 
-%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
 <%@ page import="model.*" %>
 <%
-            // Page can no longer be accessed through an URL. 
-            // Only forwarded here from servlet
+            response.setHeader("Cache-Control", "no-cache, must-revalidate");
+            response.setHeader("Expires", "Sat, 26 Jul 1997 05:00:00 GMT");
 
-            /*Object data = session.getAttribute(controller.WhoIsTheShooter.ATTRIBUTE_GAME_STATE);
-            GameState gameState = null;
-            if (data != null) {
-                gameState = (GameState) data;
-            } else {
-                // FAIL - SHOW ERROR MESSAGE AND DIE
-                out.print("<h1>EPIC FAIL</h1>");
-                return;
-            }
-            if(gameState.getCurrentQuestion() == null) {
-                // FAIL - SHOW ERROR MESSAGE AND DIE
-                out.print("<h1>EPIC FAIL</h1>");
-                return;
-            }*/
             GameState gameState = (GameState) session.getAttribute(controller.WhoIsTheShooter.ATTRIBUTE_GAME_STATE);
 %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
 
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Who's the monkey?</title>
+        <link rel="Stylesheet" href="style.css" type="text/css" media="all" />
     </head>
     <body>
-        <div>Question <%= gameState.getCurrentQuestionIndex() + 1 %> of <%= gameState.getNumQuestions() %> </div>
+        
         <form action="" method="post" name="guess">
-            <input type="hidden" name="<%=controller.WhoIsTheShooter.PARAMETER_ANSWER %>"/>
-            <input type="hidden" name="<%=controller.WhoIsTheShooter.ATTRIBUTE_KEY %>" value="<%= session.getAttribute(controller.WhoIsTheShooter.ATTRIBUTE_KEY) %>"/>
+            <input type="hidden" name="<%=controller.WhoIsTheShooter.PARAMETER_ANSWER%>"/>
+            <input type="hidden" name="<%=controller.WhoIsTheShooter.ATTRIBUTE_KEY%>" value="<%= session.getAttribute(controller.WhoIsTheShooter.ATTRIBUTE_KEY)%>"/>
         </form>
         <h1>Click on the user you think captured this photograph</h1>
+        <div class="questionNumber">Question <%= gameState.getCurrentQuestionIndex() + 1%> of <%= gameState.getNumQuestions()%> </div>
         <div class="image"><img src="image" alt="who captured this?"/></div>
         <div class="monkeys">
             <%
             int i = 0;
             for (Monkey m : gameState.getCurrentQuestion().getMonkeys()) {
-                out.println("<img src=\"image?" + controller.WhoIsTheShooter.PARAMETER_ANSWER + "="+ i +"\" alt=\"this one?\" onClick=\"document.guess." + controller.WhoIsTheShooter.PARAMETER_ANSWER + ".value = '" + i + "'; document.guess.submit();\" />");
+                out.println("<img class=\"monkey\" src=\"image?" + controller.WhoIsTheShooter.PARAMETER_ANSWER + "=" + i + "\" alt=\"this one?\" onClick=\"document.guess." + controller.WhoIsTheShooter.PARAMETER_ANSWER + ".value = '" + i + "'; document.guess.submit();\" />");
                 i++;
             }
             %>

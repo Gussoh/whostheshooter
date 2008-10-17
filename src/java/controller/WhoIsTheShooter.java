@@ -90,7 +90,6 @@ public class WhoIsTheShooter extends HttpServlet {
         }
 
         if (gameState.isGameFinished()) {
-            System.out.println(gameState);
             showScorePage(request, response);
         } else {
             showGamePage(request, response);
