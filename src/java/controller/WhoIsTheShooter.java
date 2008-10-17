@@ -26,8 +26,7 @@ public class WhoIsTheShooter extends HttpServlet {
 
     private QuestionProvider questionProvider = new FlickrQuestionProvider();
     public static final String ATTRIBUTE_GAME_STATE = "GameState";
-    public static final String ATTRIBUTE_CHECK = "Check";
-    
+    public static final String ATTRIBUTE_KEY = "key";
     public static final String PARAMETER_ANSWER = "a";
     public static final String PARAMETER_INVALIDATE = "invalidate";
 
@@ -40,10 +39,17 @@ public class WhoIsTheShooter extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
 
-        if(request.getParameter(PARAMETER_INVALIDATE) != null) {
+
+        boolean correctKey;
+        {
+            String key = request.getParameter(ATTRIBUTE_KEY);
+            correctKey = key != null && key.equals(session.getAttribute(ATTRIBUTE_KEY));
+        }
+
+        if (Boolean.parseBoolean(request.getParameter(PARAMETER_INVALIDATE)) && correctKey) {
             session.removeAttribute(ATTRIBUTE_GAME_STATE);
         }
-        
+
         Object data = session.getAttribute(ATTRIBUTE_GAME_STATE);
         GameState gameState;
 
@@ -51,7 +57,7 @@ public class WhoIsTheShooter extends HttpServlet {
         if (data == null) {
             try {
                 gameState = new GameState(questionProvider, 2);
-                session.setAttribute(ATTRIBUTE_CHECK, Integer.toHexString((int) (Math.random() * Integer.MAX_VALUE)));
+                session.setAttribute(ATTRIBUTE_KEY, Integer.toHexString((int) (Math.random() * Integer.MAX_VALUE)));
             } catch (QuestionProviderException ex) {
                 showErrorPage(ex, request, response);
                 return;
@@ -62,16 +68,16 @@ public class WhoIsTheShooter extends HttpServlet {
         }
 
         String answer = request.getParameter(PARAMETER_ANSWER);
-        String check = request.getParameter(ATTRIBUTE_CHECK);
 
         // If user tries to answer and the checkId is correct 
-        if (answer != null && check != null && check.equals(session.getAttribute(ATTRIBUTE_CHECK))) {
+        if (answer != null && correctKey) {
+
             try {
                 int answerIndex = Integer.parseInt(answer);
 
                 try {
                     gameState.answerQuestionAndCreateNext(answerIndex);
-                    session.setAttribute(ATTRIBUTE_CHECK, Integer.toHexString((int) (Math.random() * Integer.MAX_VALUE)));
+                    session.setAttribute(ATTRIBUTE_KEY, Integer.toHexString((int) (Math.random() * Integer.MAX_VALUE)));
                 } catch (QuestionProviderException ex) {
                     showErrorPage(ex, request, response);
                     return;

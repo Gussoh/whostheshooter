@@ -37,7 +37,13 @@
             }
             %>
         </table>
-        <button onclick="document.location = '?<%= WhoIsTheShooter.PARAMETER_INVALIDATE %>'">New Game</button>
+        <form action="" method="post">
+            <input type="hidden" name="<%=WhoIsTheShooter.PARAMETER_INVALIDATE%>" value="true" />
+            <input type="hidden" name="<%=WhoIsTheShooter.ATTRIBUTE_KEY %>" value="<%= session.getAttribute(WhoIsTheShooter.ATTRIBUTE_KEY) %>"/>
+            <input type="submit" value="New Game" />
+        </form>
+        
+        
         
     </body>
     
