@@ -40,7 +40,7 @@ response.setHeader("Expires", "Sat, 26 Jul 1997 05:00:00 GMT");
         <div>Question <%= gameState.getCurrentQuestionIndex() + 1 %> of <%= gameState.getNumQuestions() %> </div>
         <form action="" method="post" name="guess">
             <input type="hidden" name="<%=controller.WhoIsTheShooter.PARAMETER_ANSWER %>"/>
-            <input type="hidden" name="<%=controller.WhoIsTheShooter.ATTRIBUTE_CHECK %>" value="<%= session.getAttribute(controller.WhoIsTheShooter.ATTRIBUTE_CHECK) %>"/>
+            <input type="hidden" name="<%=controller.WhoIsTheShooter.ATTRIBUTE_KEY %>" value="<%= session.getAttribute(controller.WhoIsTheShooter.ATTRIBUTE_KEY) %>"/>
         </form>
         <h1>Click on the user you think captured this photograph</h1>
         <div class="image"><img src="image" alt="who captured this?"/></div>
