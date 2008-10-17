@@ -29,6 +29,7 @@ public class WhoIsTheShooter extends HttpServlet {
     public static final String ATTRIBUTE_KEY = "key";
     public static final String PARAMETER_ANSWER = "a";
     public static final String PARAMETER_INVALIDATE = "invalidate";
+    public static final String PARAMETER_QUESTION = "q";
 
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
