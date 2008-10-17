@@ -5,6 +5,8 @@ package controller;
  * and open the template in the editor.
  */
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import model.FlickrQuestionProvider;
 import model.GameState;
 import model.QuestionProvider;
+import model.QuestionProviderException;
 import model.TestQuestionProvider;
 
 /**
@@ -37,7 +40,12 @@ public class WhoIsTheShooter extends HttpServlet {
         Object data = session.getAttribute(ATTRIBUTE_GAME_STATE);
         GameState gameState;
         if( data == null) {
-            gameState = new GameState(questionProvider, 10);
+            try {
+                gameState = new GameState(questionProvider, 10);
+            } catch (QuestionProviderException ex) {
+                forwardToErrorPage(ex, request, response);
+                return;
+            }
             session.setAttribute(ATTRIBUTE_GAME_STATE, gameState);
         } else {
             gameState = (GameState) data;
@@ -47,7 +55,12 @@ public class WhoIsTheShooter extends HttpServlet {
         if(answer != null) {
             try{ 
                 int answerIndex = Integer.parseInt(answer);
-                gameState.answerQuestionAndCreateNext(answerIndex);
+                try {
+                    gameState.answerQuestionAndCreateNext(answerIndex);
+                } catch (QuestionProviderException ex) {
+                    forwardToErrorPage(ex, request, response);
+                    return;
+                }
                 showGamePage(request, response);
             } catch (NumberFormatException numberFormatException) {
                 request.getSession().invalidate();

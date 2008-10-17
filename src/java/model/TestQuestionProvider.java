@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author P23225291
  */
-public class TestQuestionProvider implements QuestionProvider {
+public class TestQuestionProvider extends QuestionProvider {
 
     @Override
     public Question createQuestion() {
