@@ -27,9 +27,10 @@ import java.util.Random;
  *
  * @author TAND0015
  */
-public class FlickrQuestionProvider implements QuestionProvider {
+public class FlickrQuestionProvider extends QuestionProvider {
     private static RequestContext requestContext;
-    public Question createQuestion() {
+    @Override
+    protected Question createQuestion() throws QuestionProviderException {
         
         requestContext = RequestContext.getRequestContext();
         String apiKey = "159ced7ac09b5794485ac8dee1e4be20";
@@ -47,10 +48,13 @@ public class FlickrQuestionProvider implements QuestionProvider {
             
         } catch (IOException ex) {
             Logger.getLogger(FlickrQuestionProvider.class.getName()).log(Level.SEVERE, null, ex);
+            throw new QuestionProviderException(ex.toString());
         } catch (SAXException ex) {
             Logger.getLogger(FlickrQuestionProvider.class.getName()).log(Level.SEVERE, null, ex);
+            throw new QuestionProviderException(ex.toString());
         } catch (FlickrException ex) {
             Logger.getLogger(FlickrQuestionProvider.class.getName()).log(Level.SEVERE, null, ex);
+            throw new QuestionProviderException(ex.toString());
         }
         
         Random r = new Random();
@@ -65,6 +69,7 @@ public class FlickrQuestionProvider implements QuestionProvider {
             try {
                 monkeys.add(new Monkey(new URL(ownerIconUrl)));
             } catch (IOException ex) {
+                throw new QuestionProviderException(ex.toString());
             }
         }       
                
@@ -72,6 +77,7 @@ public class FlickrQuestionProvider implements QuestionProvider {
         try {
             qi = new QuestionImage(new URL(photoUrl));
         } catch (IOException ex) {
+            throw new QuestionProviderException(ex.toString());
         }
         return new Question(monkeys, 3, qi);       
         //return null;

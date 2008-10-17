@@ -20,11 +20,11 @@ public class GameState {
     private int numQuestions,  currentQuestion;
     private QuestionProvider questionProvider;
 
-    public GameState(QuestionProvider questionProvider, int numQuestions) {
+    public GameState(QuestionProvider questionProvider, int numQuestions) throws QuestionProviderException {
         this.questionProvider = questionProvider;
         this.numQuestions = numQuestions;
 
-        questions.add(questionProvider.createQuestion());
+        questions.add(questionProvider.getPrefetchedQuestion());
         currentQuestion = 0;
     }
 
@@ -33,7 +33,7 @@ public class GameState {
      * After this method returns, getCurrentQuestion will return a new question.
      * @param answer
      */
-    public void answerQuestionAndCreateNext(int answer) {
+    public void answerQuestionAndCreateNext(int answer) throws QuestionProviderException {
         if(answer < 0 || answer >= getCurrentQuestion().getMonkeys().size()) {
             throw new IllegalStateException("Illegal answer index.");
         }
@@ -41,7 +41,7 @@ public class GameState {
             throw new IllegalStateException("Cannot answer question. Game already finished.");
         }
         questionToAnswerMap.put(getCurrentQuestion(), answer);
-        questions.add(questionProvider.createQuestion());
+        questions.add(questionProvider.getPrefetchedQuestion());
         currentQuestion++;
     }
     /**
