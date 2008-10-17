@@ -1,0 +1,68 @@
+/* 
+Document   : style
+Created on : Oct 17, 2008, 6:17:16 PM
+Author     : P23225291
+Description:
+Purpose of the stylesheet follows.
+*/
+
+/* 
+TODO customize this sample style
+Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+root { 
+    display: block;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+    background-color: #27210E;
+    color: #B4CCB9;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    text-align: center;
+}
+
+h1 {
+    margin-top: 1em;
+    font-size: 1.2em;
+}
+
+div.image {
+    margin: 1em 0em 0em 0em;
+    padding: 0em;
+    background-color: #545835;
+    border-width: 0.3em 0px 0px 0px;
+    border-color: #C19534;
+    border-style: solid;
+}
+div.image img {
+    border-width: 0px 1px;
+    border-color: black;
+    border-style: solid;
+}
+
+
+
+img.monkey {
+    margin: 1em 0em;
+    cursor: pointer;
+    border: 1px solid black;
+}
+
+div.score {
+    margin: 1em 0em 0em 0em;
+    padding: 0em;
+    background-color: #545835;
+    border-width: 0.3em 0px 0px 0px;
+    border-color: #C19534;
+    border-style: solid;
+}
+
+table {
+    margin: 2em;
+    
+}
+
+

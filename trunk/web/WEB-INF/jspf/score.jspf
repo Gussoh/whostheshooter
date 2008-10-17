@@ -11,35 +11,37 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
 <html>
     <head>
+        <link rel="Stylesheet" href="style.css" type="text/css" media="all" />
         <title>Who's the shooter?</title>
     </head>
     <body>
-        <div>You finished the game!</div>
+        <h1>You finished the game!</h1>
         <div>
             Correct Answers: <%= gameState.getNumCorrect() + " of " + gameState.getNumQuestions() +
-                        " (" + nf.format(gameState.getCorrectRatio()) + ")" %>
+                        " (" + nf.format(gameState.getCorrectRatio()) + ")"%>
         </div>
         
-        
-        <table>
-            <%
+        <div class="score">
+            <table>
+                <%
             int correctAnswered = 0;
             for (int i = 0; i < gameState.getNumQuestions(); i++) {
                 Question q = gameState.getQuestions().get(i);
                 if (gameState.getQuestionToAnswerMap().get(q) == q.getCorrectMonkeyIndex())
-            %>
-            <tr>
-                <td><%= i%></td>
-                <td><%= gameState.getQuestionToAnswerMap().get(q) == q.getCorrectMonkeyIndex() ? "Yes" : "No"%></td>                
-            </tr>
-            
-            <%
+                %>
+                <tr>
+                    <td><%= i%></td>
+                    <td><%= gameState.getQuestionToAnswerMap().get(q) == q.getCorrectMonkeyIndex() ? "Yes" : "No"%></td>                
+                </tr>
+                
+                <%
             }
-            %>
-        </table>
+                %>
+            </table>
+        </div>
         <form action="" method="post">
             <input type="hidden" name="<%=WhoIsTheShooter.PARAMETER_INVALIDATE%>" value="true" />
-            <input type="hidden" name="<%=WhoIsTheShooter.ATTRIBUTE_KEY %>" value="<%= session.getAttribute(WhoIsTheShooter.ATTRIBUTE_KEY) %>"/>
+            <input type="hidden" name="<%=WhoIsTheShooter.ATTRIBUTE_KEY%>" value="<%= session.getAttribute(WhoIsTheShooter.ATTRIBUTE_KEY)%>"/>
             <input type="submit" value="New Game" />
         </form>
         
