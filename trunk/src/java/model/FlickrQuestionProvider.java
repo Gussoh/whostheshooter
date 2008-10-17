@@ -16,16 +16,12 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.xml.sax.SAXException;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.net.URL;
-import java.nio.ByteBuffer;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -41,7 +37,6 @@ public class FlickrQuestionProvider extends QuestionProvider {
     HashSet<String> errorMonkeyUrls = new HashSet<String>();
 
     @Override
-    @SuppressWarnings("empty-statement")
     protected Question createQuestion() throws QuestionProviderException {
 
 
@@ -66,13 +61,16 @@ public class FlickrQuestionProvider extends QuestionProvider {
         int correctOwnerIconFarm = 0;
         Random r = new Random();
         int randint = 0;
-        String profilePagePrefix = "http://flickr.com/people";
+        String profilePagePrefix = "http://www.flickr.com/photos/";
 
- 
-        // get the correct monkey
-        while (correctOwnerIconFarm == 0 && !errorMonkeyUrls.contains(ownerIconUrl)) {
+
+        // get the correct monkey                  if we have 400 errormonkeys the probability of showing the monkey as error at the same time is small enough
+        while (correctOwnerIconFarm == 0 || (errorMonkeyUrls.contains(ownerIconUrl) && errorMonkeys.size() < 400)) {
+            System.out.println("Entering search for photo and user");
             try {
-                photoList = photosInterface.getRecent(5, 1);
+                                                    
+                int page = 1;//(int) (Math.random() * 10); // we could use a small random page number for a little bit more random set of users.. i dont know if its better..
+                photoList = photosInterface.getRecent(5, (int) (Math.random() * 100));
             } catch (IOException ex) {
                 Logger.getLogger(FlickrQuestionProvider.class.getName()).log(Level.SEVERE, null, ex);
                 throw new QuestionProviderException(ex.toString());
@@ -105,15 +103,25 @@ public class FlickrQuestionProvider extends QuestionProvider {
             photoPageUrl = photo.getUrl();
             ownerIconUrl = ownerInfo.getBuddyIconUrl();
             ownerUsername = ownerInfo.getUsername();
-        }        
-        
-        
+            
+            System.out.println("\tUSER: " + ownerInfo.getUsername() + "\tPHOTO TITLE: " + photo.getTitle());
+        }
+
+
         // getting error monkey icons
         boolean first = true;
-        while (errorMonkeys.size() < 10 || first) {
+        int counter = 0;
+        while (errorMonkeys.size() < 5 || first) {
+            System.out.println("Entering search for error monkeys, count: " + counter + ", number of error monkeys: " + errorMonkeys.size());
             first = false;
+            if(counter++ > 60) { // just in case we do this forever...
+                throw new QuestionProviderException("Could not find enough error monkeys! :(");
+            }
             try {
-                photoList = photosInterface.getRecent(10, 1);
+                int page = 1; //(int) (Math.random() * 100); // maybe use a random page number for a more random set of users
+                photoList = photosInterface.getRecent(10, page); 
+                // This requires some read permissions we dont have:
+                //photoList = photosInterface.getWithGeoData(null, null, null, null, 1, "interestingness-desc", new HashSet<String>(Arrays.asList(new String[] {"icon_server"})), 5, 1);
             } catch (IOException ex) {
                 Logger.getLogger(FlickrQuestionProvider.class.getName()).log(Level.SEVERE, null, ex);
                 throw new QuestionProviderException(ex.toString());
@@ -143,11 +151,19 @@ public class FlickrQuestionProvider extends QuestionProvider {
                 }
                 String errorMonkeyIconUrl = currentInfo.getBuddyIconUrl();
                 String errorMonkeyUsername = currentInfo.getUsername();
-                if (currentInfo.getIconServer() != 0 && !errorMonkeyIconUrl.equals(ownerIconUrl)) {
-                    
+                
+                boolean hasIcon = currentInfo.getIconServer() != 0;
+                boolean isRealOwner = errorMonkeyIconUrl.equals(ownerIconUrl);
+                
+                System.out.println("\tUSER: " + errorMonkeyUsername + (hasIcon ? "\tADDING BUDDYICON" : "") + (isRealOwner ? "\tREAL OWNER - NOT ADDING!" : ""));
+                
+                if (hasIcon && !isRealOwner) {
+
                     try {
-                        errorMonkeys.add(new Monkey(new URL(errorMonkeyIconUrl), new URL(profilePagePrefix + errorMonkeyUsername) ));
-                        errorMonkeyUrls.add(errorMonkeyIconUrl);
+                        if (!errorMonkeyUrls.contains(errorMonkeyIconUrl)) { // add it if it isn't already there
+                            errorMonkeys.add(new Monkey(new URL(errorMonkeyIconUrl), new URL(profilePagePrefix + URLEncoder.encode(errorMonkeyUsername, "UTF-8"))));
+                            errorMonkeyUrls.add(errorMonkeyIconUrl);
+                        }
                     } catch (IOException ex) {
                         Logger.getLogger(FlickrQuestionProvider.class.getName()).log(Level.SEVERE, null, ex);
                         throw new QuestionProviderException(ex.toString());
@@ -160,7 +176,7 @@ public class FlickrQuestionProvider extends QuestionProvider {
         int correct = (int) (Math.random() * numberOfMonkeys);
         Monkey[] monkeys = new Monkey[numberOfMonkeys];
         try {
-            monkeys[correct] = new Monkey(new URL(ownerIconUrl), new URL(profilePagePrefix + ownerUsername));
+            monkeys[correct] = new Monkey(new URL(ownerIconUrl), new URL(profilePagePrefix + URLEncoder.encode(ownerUsername, "UTF-8")));
         } catch (IOException ex) {
             Logger.getLogger(FlickrQuestionProvider.class.getName()).log(Level.SEVERE, null, ex);
             throw new QuestionProviderException(ex.toString());

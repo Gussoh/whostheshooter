@@ -6,13 +6,13 @@ package view;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import javax.print.attribute.ResolutionSyntax;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.GameState;
+import model.Question;
 
 /**
  *
@@ -25,7 +25,7 @@ public class ViewImage extends HttpServlet {
         try {
             
             response.setHeader("Cache-Control", "no-cache, must-revalidate");
-            response.setHeader("Expires", "Sat, 26 Jul 1997 05:00:00 GMT");
+            response.setHeader("Expires", "Sat, 26 Jul 1997 05:00:00 GMT"); // random date in the past
             HttpSession session = request.getSession();
             
             
@@ -36,20 +36,40 @@ public class ViewImage extends HttpServlet {
                 return;
             }
             
+            Question question = null;
+            
+            if(!gameState.isGameFinished()) { // if game isnt finished, allow only the current question to be shown
+                question = gameState.getCurrentQuestion();
+            } else { // otherwise expect a question parameter
+                String questionParam = request.getParameter(controller.WhoIsTheShooter.PARAMETER_QUESTION);
+                
+                if(questionParam == null || questionParam.length() == 0) {
+                    return;
+                }
+                
+                int questionIndex = Integer.parseInt(questionParam);
+                if(gameState.getQuestions().get(questionIndex) != null) {
+                    question = gameState.getQuestions().get(questionIndex);
+                } else { // game finished but no or invalid question parameter -- or is everything caught?
+                    return;
+                }
+            } 
+              
+            
             if (param == null || param.isEmpty()) {
-                ByteBuffer buffer = gameState.getCurrentQuestion().getQuestionImage().getImageData();
-                response.setContentLength(gameState.getCurrentQuestion().getQuestionImage().getSize());
-                response.setContentType(gameState.getCurrentQuestion().getQuestionImage().getContentType());
+                ByteBuffer buffer = question.getQuestionImage().getImageData();
+                response.setContentLength(question.getQuestionImage().getSize());
+                response.setContentType(question.getQuestionImage().getContentType());
                 response.getOutputStream().write(buffer.array());
             } else {
                 int monkeyIndex = Integer.parseInt(param);
-                if(gameState.getCurrentQuestion().getMonkeys().get(monkeyIndex) == null) {
+                if(question.getMonkeys().get(monkeyIndex) == null) {
                     return;
                 }
                     
-                ByteBuffer buffer = gameState.getCurrentQuestion().getMonkeys().get(monkeyIndex).getImageData();
-                response.setContentLength(gameState.getCurrentQuestion().getMonkeys().get(monkeyIndex).getSize());
-                response.setContentType(gameState.getCurrentQuestion().getMonkeys().get(monkeyIndex).getContentType());
+                ByteBuffer buffer = question.getMonkeys().get(monkeyIndex).getImageData();
+                response.setContentLength(question.getMonkeys().get(monkeyIndex).getSize());
+                response.setContentType(question.getMonkeys().get(monkeyIndex).getContentType());
                 response.getOutputStream().write(buffer.array());
             }
 

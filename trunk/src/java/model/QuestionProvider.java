@@ -51,6 +51,7 @@ public abstract class QuestionProvider {
         public void run() {
             for (;;) {
                 try {
+                    System.out.println("Fetching new question, cache size: " + questionCache.size() + " / " + (questionCache.size() + questionCache.remainingCapacity()));
                     questionCache.put(createQuestion());
                     lastException = null;
                 } catch (InterruptedException ex) {
@@ -58,6 +59,7 @@ public abstract class QuestionProvider {
                 } catch (QuestionProviderException ex) {
                     lastException = ex;
                     try {
+                        System.out.println("Error, sleeping 5 seconds...");
                         Thread.sleep(5000);
                     } catch (InterruptedException ex1) {
                     }
