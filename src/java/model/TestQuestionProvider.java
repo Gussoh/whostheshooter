@@ -20,13 +20,13 @@ public class TestQuestionProvider extends QuestionProvider {
         List<Monkey> monkeys = new LinkedList<Monkey>();
         for (int i = 0; i < 4; i++) {
             try {
-                monkeys.add(new Monkey(new URL("http://imgs.xkcd.com/comics/barrel_cropped_(1).jpg")));
+                monkeys.add(new Monkey(new URL("http://imgs.xkcd.com/comics/barrel_cropped_(1).jpg"), new URL("http://imgs.xkcd.com/comics/barrel_cropped_(1).jpg")));
             } catch (IOException ex) {
             }
         }
         QuestionImage qi = null;
         try {
-            qi = new QuestionImage(new URL("http://imgs.xkcd.com/comics/barrel_cropped_(1).jpg"));
+            qi = new QuestionImage(new URL("http://imgs.xkcd.com/comics/barrel_cropped_(1).jpg"), new URL("http://imgs.xkcd.com/comics/barrel_cropped_(1).jpg"));
         } catch (IOException ex) {
         }
         return new Question(monkeys, 3, qi);
