@@ -57,13 +57,16 @@ public class FlickrQuestionProvider extends QuestionProvider {
         PhotoList photoList = null;
         Photo photo = null;
         String photoUrl = null;
+        String photoPageUrl = null;
         PeopleInterface peopleInterface = f.getPeopleInterface();
         User photoOwner = null;
         User ownerInfo = null;
         String ownerIconUrl = null;
+        String ownerUsername = null;
         int correctOwnerIconFarm = 0;
         Random r = new Random();
         int randint = 0;
+        String profilePagePrefix = "http://flickr.com/people";
 
  
         // get the correct monkey
@@ -72,10 +75,13 @@ public class FlickrQuestionProvider extends QuestionProvider {
                 photoList = photosInterface.getRecent(5, 1);
             } catch (IOException ex) {
                 Logger.getLogger(FlickrQuestionProvider.class.getName()).log(Level.SEVERE, null, ex);
+                throw new QuestionProviderException(ex.toString());
             } catch (SAXException ex) {
                 Logger.getLogger(FlickrQuestionProvider.class.getName()).log(Level.SEVERE, null, ex);
+                throw new QuestionProviderException(ex.toString());
             } catch (FlickrException ex) {
                 Logger.getLogger(FlickrQuestionProvider.class.getName()).log(Level.SEVERE, null, ex);
+                throw new QuestionProviderException(ex.toString());
             }
             randint = Math.abs(r.nextInt()) % 5;
             photo = (Photo) photoList.get(randint);
@@ -85,15 +91,20 @@ public class FlickrQuestionProvider extends QuestionProvider {
                 ownerInfo = peopleInterface.getInfo(photoOwner.getId());
             } catch (IOException ex) {
                 Logger.getLogger(FlickrQuestionProvider.class.getName()).log(Level.SEVERE, null, ex);
+                throw new QuestionProviderException(ex.toString());
             } catch (SAXException ex) {
                 Logger.getLogger(FlickrQuestionProvider.class.getName()).log(Level.SEVERE, null, ex);
+                throw new QuestionProviderException(ex.toString());
             } catch (FlickrException ex) {
                 Logger.getLogger(FlickrQuestionProvider.class.getName()).log(Level.SEVERE, null, ex);
+                throw new QuestionProviderException(ex.toString());
             }
 
             correctOwnerIconFarm = ownerInfo.getIconFarm();
             photoUrl = photo.getMediumUrl();
+            photoPageUrl = photo.getUrl();
             ownerIconUrl = ownerInfo.getBuddyIconUrl();
+            ownerUsername = ownerInfo.getUsername();
         }        
         
         
@@ -105,10 +116,13 @@ public class FlickrQuestionProvider extends QuestionProvider {
                 photoList = photosInterface.getRecent(10, 1);
             } catch (IOException ex) {
                 Logger.getLogger(FlickrQuestionProvider.class.getName()).log(Level.SEVERE, null, ex);
+                throw new QuestionProviderException(ex.toString());
             } catch (SAXException ex) {
                 Logger.getLogger(FlickrQuestionProvider.class.getName()).log(Level.SEVERE, null, ex);
+                throw new QuestionProviderException(ex.toString());
             } catch (FlickrException ex) {
                 Logger.getLogger(FlickrQuestionProvider.class.getName()).log(Level.SEVERE, null, ex);
+                throw new QuestionProviderException(ex.toString());
             }
 
             for (int i = 0; i < photoList.size(); i++) {
@@ -119,33 +133,34 @@ public class FlickrQuestionProvider extends QuestionProvider {
                     currentInfo = peopleInterface.getInfo(currentOwner.getId());
                 } catch (IOException ex) {
                     Logger.getLogger(FlickrQuestionProvider.class.getName()).log(Level.SEVERE, null, ex);
+                    throw new QuestionProviderException(ex.toString());
                 } catch (SAXException ex) {
                     Logger.getLogger(FlickrQuestionProvider.class.getName()).log(Level.SEVERE, null, ex);
+                    throw new QuestionProviderException(ex.toString());
                 } catch (FlickrException ex) {
                     Logger.getLogger(FlickrQuestionProvider.class.getName()).log(Level.SEVERE, null, ex);
+                    throw new QuestionProviderException(ex.toString());
                 }
                 String errorMonkeyIconUrl = currentInfo.getBuddyIconUrl();
+                String errorMonkeyUsername = currentInfo.getUsername();
                 if (currentInfo.getIconServer() != 0 && !errorMonkeyIconUrl.equals(ownerIconUrl)) {
                     
                     try {
-                        errorMonkeys.add(new Monkey(new URL(errorMonkeyIconUrl)));
+                        errorMonkeys.add(new Monkey(new URL(errorMonkeyIconUrl), new URL(profilePagePrefix + errorMonkeyUsername) ));
                         errorMonkeyUrls.add(errorMonkeyIconUrl);
                     } catch (IOException ex) {
                         Logger.getLogger(FlickrQuestionProvider.class.getName()).log(Level.SEVERE, null, ex);
+                        throw new QuestionProviderException(ex.toString());
                     }
                 }
             }
         }
 
-
-
-
-
         Collections.shuffle(errorMonkeys);
         int correct = (int) (Math.random() * numberOfMonkeys);
         Monkey[] monkeys = new Monkey[numberOfMonkeys];
         try {
-            monkeys[correct] = new Monkey(new URL(ownerIconUrl));
+            monkeys[correct] = new Monkey(new URL(ownerIconUrl), new URL(profilePagePrefix + ownerUsername));
         } catch (IOException ex) {
             Logger.getLogger(FlickrQuestionProvider.class.getName()).log(Level.SEVERE, null, ex);
             throw new QuestionProviderException(ex.toString());
@@ -166,14 +181,10 @@ public class FlickrQuestionProvider extends QuestionProvider {
         }*/
         QuestionImage qi = null;
         try {
-            qi = new QuestionImage(new URL(photoUrl));
+            qi = new QuestionImage(new URL(photoUrl), new URL(photoPageUrl));
         } catch (IOException ex) {
             throw new QuestionProviderException(ex.toString());
         }
-
-
-
-
 
         return new Question(Arrays.asList(monkeys), correct, qi);
     //return null;
