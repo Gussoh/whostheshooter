@@ -17,7 +17,6 @@ import model.FlickrQuestionProvider;
 import model.GameState;
 import model.QuestionProvider;
 import model.QuestionProviderException;
-import model.TestQuestionProvider;
 
 /**
  *
@@ -28,6 +27,7 @@ public class WhoIsTheShooter extends HttpServlet {
     private QuestionProvider questionProvider = new FlickrQuestionProvider();
     public static final String ATTRIBUTE_GAME_STATE = "GameState";
     public static final String PARAMETER_ANSWER = "a";
+    public static final String ATTRIBUTE_CHECK = "Check";
 
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -57,6 +57,7 @@ public class WhoIsTheShooter extends HttpServlet {
                 int answerIndex = Integer.parseInt(answer);
                 try {
                     gameState.answerQuestionAndCreateNext(answerIndex);
+                    session.setAttribute(ATTRIBUTE_CHECK, Integer.toHexString((int) (Math.random() * Integer.MAX_VALUE)));
                 } catch (QuestionProviderException ex) {
                     forwardToErrorPage(ex, request, response);
                     return;
