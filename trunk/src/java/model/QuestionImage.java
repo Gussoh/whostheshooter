@@ -27,6 +27,11 @@ public class QuestionImage extends GameImage {
         this.webPage = webPage;
     }
 
+    public URL getWebPage() {
+        return webPage;
+    }
+
+    
 
     
 }

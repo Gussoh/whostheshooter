@@ -26,4 +26,10 @@ public class Monkey extends GameImage {
         super(imageData, contentType);
         this.profile = profile;
     }
+
+    public URL getProfile() {
+        return profile;
+    }
+    
+    
 }
