@@ -1,0 +1,44 @@
+<%@page contentType="text/html" pageEncoding="UTF-8" %>
+<%@page import="model.*, controller.WhoIsTheShooter, java.util.*, java.text.*" %>
+
+<%
+// Only callable from servlet.
+            response.setHeader("Cache-Control", "no-cache, must-revalidate");
+            response.setHeader("Expires", "Sat, 26 Jul 1997 05:00:00 GMT");
+            NumberFormat nf = NumberFormat.getPercentInstance();
+            GameState gameState = (GameState) session.getAttribute(WhoIsTheShooter.ATTRIBUTE_GAME_STATE);
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<html>
+    <head>
+        <title>Who's the shooter?</title>
+    </head>
+    <body>
+        <div>You finished the game!</div>
+        <div>
+            Correct Answers: <%= gameState.getNumCorrect() + " of " + gameState.getNumQuestions() +
+                        " (" + nf.format(gameState.getCorrectRatio()) + ")" %>
+        </div>
+        
+        
+        <table>
+            <%
+            int correctAnswered = 0;
+            for (int i = 0; i < gameState.getNumQuestions(); i++) {
+                Question q = gameState.getQuestions().get(i);
+                if (gameState.getQuestionToAnswerMap().get(q) == q.getCorrectMonkeyIndex())
+            %>
+            <tr>
+                <td><%= i%></td>
+                <td><%= gameState.getQuestionToAnswerMap().get(q) == q.getCorrectMonkeyIndex() ? "Yes" : "No"%></td>                
+            </tr>
+            
+            <%
+            }
+            %>
+        </table>
+        <button onclick="document.location = '?<%= WhoIsTheShooter.PARAMETER_INVALIDATE %>'">New Game</button>
+        
+    </body>
+    
+</html>

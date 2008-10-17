@@ -17,7 +17,7 @@ public class GameState {
 
     private List<Question> questions = new LinkedList<Question>();
     private Map<Question, Integer> questionToAnswerMap = new HashMap<Question, Integer>();
-    private int numQuestions,  currentQuestion;
+    private int numQuestions,  currentQuestionIndex;
     private QuestionProvider questionProvider;
 
     public GameState(QuestionProvider questionProvider, int numQuestions) throws QuestionProviderException {
@@ -25,7 +25,7 @@ public class GameState {
         this.numQuestions = numQuestions;
 
         questions.add(questionProvider.getPrefetchedQuestion());
-        currentQuestion = 0;
+        currentQuestionIndex = 0;
     }
 
     /**
@@ -34,33 +34,41 @@ public class GameState {
      * @param answer
      */
     public void answerQuestionAndCreateNext(int answer) throws QuestionProviderException {
-        if(answer < 0 || answer >= getCurrentQuestion().getMonkeys().size()) {
+        if (answer < 0 || answer >= getCurrentQuestion().getMonkeys().size()) {
             throw new IllegalStateException("Illegal answer index.");
         }
-        if(isGameFinished()) {
+        if (isGameFinished()) {
             throw new IllegalStateException("Cannot answer question. Game already finished.");
         }
         questionToAnswerMap.put(getCurrentQuestion(), answer);
-        questions.add(questionProvider.getPrefetchedQuestion());
-        currentQuestion++;
+
+        currentQuestionIndex++;
+
+        // question list and map doesnt match if question is added when game is finished.
+        // Must be here since game is finished depends on currentQuestionIndex
+        if (!isGameFinished()) {
+            questions.add(questionProvider.getPrefetchedQuestion());
+        }
+
     }
+
     /**
      * Returns current Question or null if game is finished.
      * @return
      */
     public Question getCurrentQuestion() {
-        if(isGameFinished()) {
+        if (isGameFinished()) {
             return null;
         }
-        return questions.get(currentQuestion);
+        return questions.get(currentQuestionIndex);
     }
-    
+
     /**
      * Returns current question index. starts at 0.
      * @return the index.
      */
     public int getCurrentQuestionIndex() {
-        return currentQuestion;
+        return currentQuestionIndex;
     }
 
     /**
@@ -70,12 +78,44 @@ public class GameState {
     public int getNumQuestions() {
         return numQuestions;
     }
-    
+
     /**
      * 
      * @return true if game is finished, otherwise false.
      */
     public boolean isGameFinished() {
-        return currentQuestion >= numQuestions;
+        return currentQuestionIndex >= numQuestions;
+    }
+
+    public Map<Question, Integer> getQuestionToAnswerMap() {
+        return questionToAnswerMap;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
+    }
+    
+    public int getNumCorrect() {
+        int correctAnswered = 0;
+        for (Map.Entry<Question, Integer> entry : questionToAnswerMap.entrySet()) {
+            if(entry.getValue() == entry.getKey().getCorrectMonkeyIndex()) {
+                correctAnswered++;
+            }
+        }
+        return correctAnswered;
+    }
+    
+    public double getCorrectRatio() {
+        return ((double) getNumCorrect()) / getNumQuestions();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("\nCurrentQuestionIndex: \t").append(currentQuestionIndex);
+        sb.append("\nNumber of question: \t").append(numQuestions);
+        sb.append("\nQuestion provider: \t").append(questionProvider);
+        sb.append("\nQuestion List: \t").append(questions);
+        sb.append("\nQuestion to Answer map: \t").append(questionToAnswerMap);
+        return sb.toString();
     }
 }
