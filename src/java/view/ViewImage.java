@@ -6,6 +6,7 @@ package view;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import javax.print.attribute.ResolutionSyntax;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,7 +23,11 @@ public class ViewImage extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+            
+            response.setHeader("Cache-Control", "no-cache, must-revalidate");
+            response.setHeader("Expires", "Sat, 26 Jul 1997 05:00:00 GMT");
             HttpSession session = request.getSession();
+            
             
             String param = request.getParameter(controller.WhoIsTheShooter.PARAMETER_ANSWER);
             GameState gameState = (GameState) session.getAttribute(controller.WhoIsTheShooter.ATTRIBUTE_GAME_STATE);
