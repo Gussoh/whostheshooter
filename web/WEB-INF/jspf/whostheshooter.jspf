@@ -16,7 +16,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <title>Who's the monkey?</title>
+        <title>Who's the shooter?</title>
         <link rel="Stylesheet" href="style.css" type="text/css" media="all" />
     </head>
     <body>
@@ -25,14 +25,14 @@
             <input type="hidden" name="<%=controller.WhoIsTheShooter.PARAMETER_ANSWER%>"/>
             <input type="hidden" name="<%=controller.WhoIsTheShooter.ATTRIBUTE_KEY%>" value="<%= session.getAttribute(controller.WhoIsTheShooter.ATTRIBUTE_KEY)%>"/>
         </form>
-        <h1>Click on the user you think captured this photograph</h1>
+        <h1>Click on the user you think captured this image</h1>
         <div class="questionNumber">Question <%= gameState.getCurrentQuestionIndex() + 1%> of <%= gameState.getNumQuestions()%> </div>
-        <div class="image"><img src="image" alt="who captured this?"/></div>
+        <div class="image"><img class="questionImage" src="image" alt="who captured this?"/></div>
         <div class="monkeys">
             <%
             int i = 0;
             for (Monkey m : gameState.getCurrentQuestion().getMonkeys()) {
-                out.println("<img class=\"monkey\" src=\"image?" + controller.WhoIsTheShooter.PARAMETER_ANSWER + "=" + i + "\" alt=\"this one?\" onClick=\"document.guess." + controller.WhoIsTheShooter.PARAMETER_ANSWER + ".value = '" + i + "'; document.guess.submit();\" />");
+                out.println("<img class=\"monkey\" src=\"image?" + controller.WhoIsTheShooter.PARAMETER_ANSWER + "=" + i + "\" alt=\"this buddy?\" onClick=\"document.guess." + controller.WhoIsTheShooter.PARAMETER_ANSWER + ".value = '" + i + "'; document.guess.submit();\" />");
                 i++;
             }
             %>

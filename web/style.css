@@ -51,7 +51,7 @@ img.monkey {
     border: 1px solid black;
 }
 
-div.score {
+div.questionAnswers {
     margin: 1em 0em 0em 0em;
     padding: 0em;
     background-color: #545835;
@@ -65,4 +65,36 @@ table {
     
 }
 
+img.correct {
+    border: 2px solid green;
+}
 
+img.wrong {
+    border: 2px solid red;
+}
+
+div.questionAnswer {
+    display: inline;
+    float: left;
+    margin: 1em;
+    padding: 1em;
+}
+
+div.correct {
+    
+  background-color: #4d5835;
+}
+
+div.incorrect {
+    
+  background-color: #5e4b33;
+}
+
+img.questionImage {
+    border-width: 0px;
+}
+
+.newGameButton {
+    padding: 1em;
+    margin: 1em;
+}
