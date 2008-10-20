@@ -102,7 +102,7 @@ public class FlickrQuestionProvider extends QuestionProvider {
             photoUrl = photo.getMediumUrl();
             photoPageUrl = photo.getUrl();
             ownerIconUrl = ownerInfo.getBuddyIconUrl();
-            ownerUsername = ownerInfo.getUsername();
+            ownerUsername = ownerInfo.getId();
             
             System.out.println("\tUSER: " + ownerInfo.getUsername() + "\tPHOTO TITLE: " + photo.getTitle());
         }
@@ -150,7 +150,7 @@ public class FlickrQuestionProvider extends QuestionProvider {
                     throw new QuestionProviderException(ex.toString());
                 }
                 String errorMonkeyIconUrl = currentInfo.getBuddyIconUrl();
-                String errorMonkeyUsername = currentInfo.getUsername();
+                String errorMonkeyUsername = currentInfo.getId();
                 
                 boolean hasIcon = currentInfo.getIconServer() != 0;
                 boolean isRealOwner = errorMonkeyIconUrl.equals(ownerIconUrl);
