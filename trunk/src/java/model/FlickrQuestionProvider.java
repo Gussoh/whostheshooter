@@ -31,7 +31,6 @@ import java.util.Random;
  */
 public class FlickrQuestionProvider extends QuestionProvider {
 
-    private static RequestContext requestContext;
     private int numberOfMonkeys = 4;
     List<Monkey> errorMonkeys = new ArrayList<Monkey>();
     HashSet<String> errorMonkeyUrls = new HashSet<String>();
@@ -39,9 +38,6 @@ public class FlickrQuestionProvider extends QuestionProvider {
     @Override
     protected Question createQuestion() throws QuestionProviderException {
 
-
-
-        requestContext = RequestContext.getRequestContext();
         String apiKey = "159ced7ac09b5794485ac8dee1e4be20";
         Flickr f = new Flickr(apiKey);
 
@@ -67,9 +63,11 @@ public class FlickrQuestionProvider extends QuestionProvider {
         // get the correct monkey                  if we have 400 errormonkeys the probability of showing the monkey as error at the same time is small enough
         while (correctOwnerIconFarm == 0 || (errorMonkeyUrls.contains(ownerIconUrl) && errorMonkeys.size() < 400)) {
             System.out.println("Entering search for photo and user");
+
             try {
-                                                    
+
                 int page = 1;//(int) (Math.random() * 10); // we could use a small random page number for a little bit more random set of users.. i dont know if its better..
+
                 photoList = photosInterface.getRecent(5, (int) (Math.random() * 100));
             } catch (IOException ex) {
                 Logger.getLogger(FlickrQuestionProvider.class.getName()).log(Level.SEVERE, null, ex);
@@ -103,25 +101,33 @@ public class FlickrQuestionProvider extends QuestionProvider {
             photoPageUrl = photo.getUrl();
             ownerIconUrl = ownerInfo.getBuddyIconUrl();
             ownerUsername = ownerInfo.getId();
-            
+
             System.out.println("\tUSER: " + ownerInfo.getUsername() + "\tPHOTO TITLE: " + photo.getTitle());
         }
 
+        if (errorMonkeys.size() > 1000) {
+            System.out.println("Clearing error monkey database...");
+            errorMonkeys.clear();
+            errorMonkeyUrls.clear();
+        }
 
         // getting error monkey icons
         boolean first = true;
         int counter = 0;
         while (errorMonkeys.size() < 5 || first) {
+
             System.out.println("Entering search for error monkeys, count: " + counter + ", number of error monkeys: " + errorMonkeys.size());
             first = false;
-            if(counter++ > 60) { // just in case we do this forever...
+            if (counter++ > 60) { // just in case we do this forever...
+
                 throw new QuestionProviderException("Could not find enough error monkeys! :(");
             }
             try {
                 int page = 1; //(int) (Math.random() * 100); // maybe use a random page number for a more random set of users
-                photoList = photosInterface.getRecent(10, page); 
-                // This requires some read permissions we dont have:
-                //photoList = photosInterface.getWithGeoData(null, null, null, null, 1, "interestingness-desc", new HashSet<String>(Arrays.asList(new String[] {"icon_server"})), 5, 1);
+
+                photoList = photosInterface.getRecent(10, page);
+            // This requires some read permissions we dont have:
+            //photoList = photosInterface.getWithGeoData(null, null, null, null, 1, "interestingness-desc", new HashSet<String>(Arrays.asList(new String[] {"icon_server"})), 5, 1);
             } catch (IOException ex) {
                 Logger.getLogger(FlickrQuestionProvider.class.getName()).log(Level.SEVERE, null, ex);
                 throw new QuestionProviderException(ex.toString());
@@ -151,16 +157,17 @@ public class FlickrQuestionProvider extends QuestionProvider {
                 }
                 String errorMonkeyIconUrl = currentInfo.getBuddyIconUrl();
                 String errorMonkeyUsername = currentInfo.getId();
-                
+
                 boolean hasIcon = currentInfo.getIconServer() != 0;
                 boolean isRealOwner = errorMonkeyIconUrl.equals(ownerIconUrl);
-                
+
                 System.out.println("\tUSER: " + errorMonkeyUsername + (hasIcon ? "\tADDING BUDDYICON" : "") + (isRealOwner ? "\tREAL OWNER - NOT ADDING!" : ""));
-                
+
                 if (hasIcon && !isRealOwner) {
 
                     try {
                         if (!errorMonkeyUrls.contains(errorMonkeyIconUrl)) { // add it if it isn't already there
+
                             errorMonkeys.add(new Monkey(new URL(errorMonkeyIconUrl), new URL(profilePagePrefix + URLEncoder.encode(errorMonkeyUsername, "UTF-8"))));
                             errorMonkeyUrls.add(errorMonkeyIconUrl);
                         }
