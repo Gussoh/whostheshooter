@@ -44,9 +44,12 @@ div.image img {
 }
 
 
+div.monkeys {
+    margin: 1em 0em 0em 0em;
+}
 
 img.monkey {
-    margin: 1em 0em;
+    margin: 0em 0em;
     cursor: pointer;
     border: 1px solid black;
 }
