@@ -57,7 +57,7 @@
 
                     %>
                     <a href="<%= monkey.getProfile()%>">
-                        <img class="monkey <%=correctOrWrong%>" src="image?<%=WhoIsTheShooter.PARAMETER_QUESTION%>=<%=i%>&<%=WhoIsTheShooter.PARAMETER_ANSWER%>=<%=j%>"/>
+                        <img border="0" class="monkey <%=correctOrWrong%>" src="image?<%=WhoIsTheShooter.PARAMETER_QUESTION%>=<%=i%>&<%=WhoIsTheShooter.PARAMETER_ANSWER%>=<%=j%>"/>
                     </a>
                     <%
                 }
