@@ -15,24 +15,29 @@
 
 <html>
     <head>
+        <script src="default.js" type="text/javascript" ></script>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <title>Who's the shooter?</title>
         <link rel="Stylesheet" href="style.css" type="text/css" media="all" />
     </head>
-    <body>
+    <body id="body">
         
         <form action="" method="post" name="guess">
             <input type="hidden" name="<%=controller.WhoIsTheShooter.PARAMETER_ANSWER%>"/>
             <input type="hidden" name="<%=controller.WhoIsTheShooter.ATTRIBUTE_KEY%>" value="<%= session.getAttribute(controller.WhoIsTheShooter.ATTRIBUTE_KEY)%>"/>
         </form>
         <h1>Click on the user you think captured this image</h1>
-        <div class="questionNumber">Question <%= gameState.getCurrentQuestionIndex() + 1%> of <%= gameState.getNumQuestions()%> </div>
-        <div class="image"><img class="questionImage" src="image" alt="who captured this?"/></div>
-        <div class="monkeys">
+        <div class="questionNumber" id="questionNumber">Question <%= gameState.getCurrentQuestionIndex() + 1%> of <%= gameState.getNumQuestions()%> </div>
+        <div class="image" id="image"><img class="questionImage" src="image" alt="who captured this?"/></div>
+        <div class="monkeys" id="monkeys">
             <%
+            
             int i = 0;
             for (Monkey m : gameState.getCurrentQuestion().getMonkeys()) {
-                out.println("<img class=\"monkey\" src=\"image?" + controller.WhoIsTheShooter.PARAMETER_ANSWER + "=" + i + "\" alt=\"this buddy?\" onClick=\"document.guess." + controller.WhoIsTheShooter.PARAMETER_ANSWER + ".value = '" + i + "'; document.guess.submit();\" />");
+                %>
+                
+                <img class="monkey" src="image?<%=controller.WhoIsTheShooter.PARAMETER_ANSWER%>=<%=i%>" alt="this buddy?" onClick="loadDocument('?<%=controller.WhoIsTheShooter.PARAMETER_XML%>&<%=controller.WhoIsTheShooter.PARAMETER_ANSWER%>=<%=i%>&<%=controller.WhoIsTheShooter.ATTRIBUTE_KEY%>=<%= session.getAttribute(controller.WhoIsTheShooter.ATTRIBUTE_KEY)%>');" />
+                <% 
                 i++;
             }
             %>

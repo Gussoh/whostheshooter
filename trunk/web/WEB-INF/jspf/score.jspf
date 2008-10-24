@@ -8,7 +8,7 @@
             NumberFormat nf = NumberFormat.getPercentInstance();
             GameState gameState = (GameState) session.getAttribute(WhoIsTheShooter.ATTRIBUTE_GAME_STATE);
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html>
     <head>
         <link rel="Stylesheet" href="style.css" type="text/css" media="all" />
@@ -57,7 +57,7 @@
 
                     %>
                     <a href="<%= monkey.getProfile()%>">
-                        <img border="0" class="monkey <%=correctOrWrong%>" src="image?<%=WhoIsTheShooter.PARAMETER_QUESTION%>=<%=i%>&<%=WhoIsTheShooter.PARAMETER_ANSWER%>=<%=j%>"/>
+                        <img class="monkey <%=correctOrWrong%>" src="image?<%=WhoIsTheShooter.PARAMETER_QUESTION%>=<%=i%>&<%=WhoIsTheShooter.PARAMETER_ANSWER%>=<%=j%>"/>
                     </a>
                     <%
                 }

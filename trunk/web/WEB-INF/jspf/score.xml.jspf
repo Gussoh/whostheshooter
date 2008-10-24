@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<%@page contentType="text/xml" pageEncoding="UTF-8" %>
+<%@page import="model.*, controller.WhoIsTheShooter, java.util.*, java.text.*" %>
+<%
+// Only callable from servlet.
+            response.setHeader("Cache-Control", "no-cache, must-revalidate");
+            response.setHeader("Expires", "Sat, 26 Jul 1997 05:00:00 GMT");
+            NumberFormat nf = NumberFormat.getPercentInstance();
+            GameState gameState = (GameState) session.getAttribute(WhoIsTheShooter.ATTRIBUTE_GAME_STATE);
+%>
+<item id="body">
+    <![CDATA[Question 
+<h1>Game Finished!</h1>
+        <div>
+            Correct Answers: <%= gameState.getNumCorrect() + " of " + gameState.getNumQuestions() +
+                        " (" + nf.format(gameState.getCorrectRatio()) + ")"%>
+        </div>
+        
+        <form action="" method="post">
+            <input type="hidden" name="<%=WhoIsTheShooter.PARAMETER_INVALIDATE%>" value="true" />
+            <input type="hidden" name="<%=WhoIsTheShooter.ATTRIBUTE_KEY%>" value="<%= session.getAttribute(WhoIsTheShooter.ATTRIBUTE_KEY)%>"/>
+            <input class="newGameButton" type="submit" value="New Game" />
+        </form>
+        
+        <div class="questionAnswers">
+            <%
+            for (int i = 0; i < gameState.getNumQuestions(); i++) {
+                Question q = gameState.getQuestions().get(i);
+                String correctOrIncorrect = "incorrect";
+                if (gameState.getQuestionToAnswerMap().get(q) == q.getCorrectMonkeyIndex()) {
+                    correctOrIncorrect = "correct";
+                }
+
+            %>
+            
+            <div class="questionAnswer <%=correctOrIncorrect%>">
+                <a href="<%= q.getQuestionImage().getWebPage()%>">
+                    <img class="questionImage" src="image?<%=WhoIsTheShooter.PARAMETER_QUESTION%>=<%=i%>"/>
+                </a>
+                <div class="monkeys">
+                    <%
+                for (int j = 0; j < q.getMonkeys().size(); j++) {
+                    Monkey monkey = q.getMonkeys().get(j);
+                    String correctOrWrong = "";
+                    if (gameState.getQuestionToAnswerMap().get(q) == j) {
+                        correctOrWrong = "wrong";
+                    }
+
+                    if (q.getCorrectMonkeyIndex() == j) {
+                        correctOrWrong = "correct";
+                    }
+
+                    %>
+                    <a href="<%= monkey.getProfile()%>">
+                        <img class="monkey <%=correctOrWrong%>" src="image?<%=WhoIsTheShooter.PARAMETER_QUESTION%>=<%=i%>&<%=WhoIsTheShooter.PARAMETER_ANSWER%>=<%=j%>"/>
+                    </a>
+                    <%
+                }
+                    %>
+                </div>
+            </div>
+            
+            <%
+
+            }
+            %>
+        </div>]]>
+    </item>
