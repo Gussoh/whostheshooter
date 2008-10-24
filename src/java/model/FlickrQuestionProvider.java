@@ -68,7 +68,7 @@ public class FlickrQuestionProvider extends QuestionProvider {
 
                 int page = 1;//(int) (Math.random() * 10); // we could use a small random page number for a little bit more random set of users.. i dont know if its better..
 
-                photoList = photosInterface.getRecent(5, (int) (Math.random() * 100));
+                photoList = photosInterface.getRecent(5, page);
             } catch (IOException ex) {
                 Logger.getLogger(FlickrQuestionProvider.class.getName()).log(Level.SEVERE, null, ex);
                 throw new QuestionProviderException(ex.toString());
