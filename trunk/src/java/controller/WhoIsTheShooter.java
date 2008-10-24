@@ -30,6 +30,7 @@ public class WhoIsTheShooter extends HttpServlet {
     public static final String PARAMETER_ANSWER = "a";
     public static final String PARAMETER_INVALIDATE = "invalidate";
     public static final String PARAMETER_QUESTION = "q";
+    public static final String PARAMETER_XML = "xml";
 
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -57,7 +58,7 @@ public class WhoIsTheShooter extends HttpServlet {
         // First time
         if (data == null) {
             try {
-                gameState = new GameState(questionProvider, 2);
+                gameState = new GameState(questionProvider, 20);
                 session.setAttribute(ATTRIBUTE_KEY, Integer.toHexString((int) (Math.random() * Integer.MAX_VALUE)));
             } catch (QuestionProviderException ex) {
                 showErrorPage(ex, request, response);
@@ -91,9 +92,17 @@ public class WhoIsTheShooter extends HttpServlet {
         }
 
         if (gameState.isGameFinished()) {
-            showScorePage(request, response);
+            if (request.getParameter(PARAMETER_XML) != null) {
+                showScorePageXML(request, response);
+            } else {
+                showScorePage(request, response);
+            }
         } else {
-            showGamePage(request, response);
+            if (request.getParameter(PARAMETER_XML) != null) {
+                showGamePageXML(request, response);
+            } else {
+                showGamePage(request, response);
+            }
         }
     }
 
@@ -138,6 +147,16 @@ public class WhoIsTheShooter extends HttpServlet {
 
     private void showScorePage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         RequestDispatcher dispatcher = getServletContext().getNamedDispatcher("scorePage");
+        dispatcher.forward(request, response);
+    }
+
+    private void showScorePageXML(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher dispatcher = getServletContext().getNamedDispatcher("scorePageXML");
+        dispatcher.forward(request, response);
+    }
+
+    private void showGamePageXML(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher dispatcher = getServletContext().getNamedDispatcher("gamePageXML");
         dispatcher.forward(request, response);
     }
 }
