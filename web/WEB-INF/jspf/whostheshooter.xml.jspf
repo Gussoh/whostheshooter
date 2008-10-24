@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<%@page contentType="text/xml" pageEncoding="UTF-8"%>
+<%@ page import="model.*" %>
+<root>
+
+
+<%
+            GameState gameState = (GameState) session.getAttribute(controller.WhoIsTheShooter.ATTRIBUTE_GAME_STATE);
+
+%>
+<item id="questionNumber">
+    <![CDATA[Question <%= gameState.getCurrentQuestionIndex() + 1%> of <%= gameState.getNumQuestions()%>]]>
+</item>
+
+<item id="image">
+    <![CDATA[<img class="questionImage" src="image?r=<%=Math.random()%>" alt="who captured this?"/>]]>
+</item>
+
+<item id="monkeys">
+<%
+            int i = 0;
+            for (Monkey m : gameState.getCurrentQuestion().getMonkeys()) {
+%>
+<![CDATA[<img class="monkey" src="image?<%=controller.WhoIsTheShooter.PARAMETER_ANSWER%>=<%=i%>&amp;r=<%=Math.random()%>" alt="this buddy?" onClick="loadDocument('?<%=controller.WhoIsTheShooter.PARAMETER_XML%>&amp;<%=controller.WhoIsTheShooter.PARAMETER_ANSWER%>=<%=i%>&amp;<%=controller.WhoIsTheShooter.ATTRIBUTE_KEY%>=<%= session.getAttribute(controller.WhoIsTheShooter.ATTRIBUTE_KEY)%>');" />]]>
+<%
+                i++;
+            }
+%>
+</item>
+</root>

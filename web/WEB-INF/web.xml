@@ -20,6 +20,14 @@
         <servlet-name>scorePage</servlet-name>
         <jsp-file>/WEB-INF/jspf/score.jspf</jsp-file>
     </servlet>
+    <servlet>
+        <servlet-name>gamePageXML</servlet-name>
+        <jsp-file>/WEB-INF/jspf/whostheshooter.xml.jspf</jsp-file>
+    </servlet>
+    <servlet>
+        <servlet-name>scorePageXML</servlet-name>
+        <jsp-file>/WEB-INF/jspf/score.xml.jspf</jsp-file>
+    </servlet>
     <servlet-mapping>
         <servlet-name>image</servlet-name>
         <url-pattern>/image</url-pattern>
