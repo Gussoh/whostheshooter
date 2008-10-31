@@ -36,6 +36,8 @@ function createRequest(){
 
 
 function loadDocument(url) {
+    
+    document.getElementById("loading").style.display = "block";
     request = createRequest();
     if(request == null) {
         return;
@@ -44,6 +46,8 @@ function loadDocument(url) {
     request.onreadystatechange = processRequestChange;
     request.open("GET", url, true);
     request.send(null);
+    
+   
 }
 
 function processRequestChange() {
@@ -81,5 +85,6 @@ function parse(xmldata) {
               }
           }
     }
-
+    document.getElementById("loading").style.display = "none";
+    
 }
