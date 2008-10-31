@@ -9,7 +9,6 @@
             response.setHeader("Cache-Control", "no-cache, must-revalidate");
             response.setHeader("Expires", "Sat, 26 Jul 1997 05:00:00 GMT");
 
-            GameState gameState = (GameState) session.getAttribute(controller.WhoIsTheShooter.ATTRIBUTE_GAME_STATE);
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"> 
 
@@ -22,12 +21,9 @@
     </head>
     <body id="body" onload="loadDocument('?<%= controller.WhoIsTheShooter.PARAMETER_XML%>')">
         
-        <form action="" method="post" name="guess">
-            <input type="hidden" name="<%=controller.WhoIsTheShooter.PARAMETER_ANSWER%>"/>
-            <input type="hidden" name="<%=controller.WhoIsTheShooter.ATTRIBUTE_KEY%>" value="<%= session.getAttribute(controller.WhoIsTheShooter.ATTRIBUTE_KEY)%>"/>
-        </form>
+        
         <h1>Click on the user you think captured this image</h1>
-        <div class="questionNumber" id="questionNumber">Question <%= gameState.getCurrentQuestionIndex() + 1%> of <%= gameState.getNumQuestions()%> </div>
+        <div class="questionNumber" id="questionNumber"> </div>
         <div class="image" id="image"></div>
         <div class="monkeys" id="monkeys">
           

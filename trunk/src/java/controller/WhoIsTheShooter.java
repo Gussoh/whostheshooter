@@ -52,21 +52,27 @@ public class WhoIsTheShooter extends HttpServlet {
             session.removeAttribute(ATTRIBUTE_GAME_STATE);
         }
 
-        Object data = session.getAttribute(ATTRIBUTE_GAME_STATE);
+        Object gameStateAttribute = session.getAttribute(ATTRIBUTE_GAME_STATE);
         GameState gameState;
 
-        // First time
-        if (data == null) {
-            try {
-                gameState = new GameState(questionProvider, 20);
-                session.setAttribute(ATTRIBUTE_KEY, Integer.toHexString((int) (Math.random() * Integer.MAX_VALUE)));
-            } catch (QuestionProviderException ex) {
-                showErrorPage(ex, request, response);
-                return;
+        // First time user request XML data
+        if (request.getParameter(PARAMETER_XML) != null) {
+            if (gameStateAttribute == null) {
+                try {
+                    gameState = new GameState(questionProvider, 20);
+                    session.setAttribute(ATTRIBUTE_KEY, Integer.toHexString((int) (Math.random() * Integer.MAX_VALUE)));
+                } catch (QuestionProviderException ex) {
+                    showErrorPage(ex, request, response);
+                    return;
+                }
+                session.setAttribute(ATTRIBUTE_GAME_STATE, gameState);
+            } else {
+                gameState = (GameState) gameStateAttribute;
             }
-            session.setAttribute(ATTRIBUTE_GAME_STATE, gameState);
         } else {
-            gameState = (GameState) data;
+            // First time user visits the page, show empty page and let ajax fetch first question
+            showGamePage(request, response);
+            return;
         }
 
         String answer = request.getParameter(PARAMETER_ANSWER);
