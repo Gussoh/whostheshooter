@@ -32,6 +32,10 @@ public class WhoIsTheShooter extends HttpServlet {
     public static final String PARAMETER_QUESTION = "q";
     public static final String PARAMETER_XML = "xml";
 
+    public WhoIsTheShooter() {
+        questionProvider.startNewFetchingThread();
+    }
+    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -59,7 +63,7 @@ public class WhoIsTheShooter extends HttpServlet {
         if (request.getParameter(PARAMETER_XML) != null) {
             if (gameStateAttribute == null) {
                 try {
-                    gameState = new GameState(questionProvider, 20);
+                    gameState = new GameState(questionProvider, 5);
                     session.setAttribute(ATTRIBUTE_KEY, Integer.toHexString((int) (Math.random() * Integer.MAX_VALUE)));
                 } catch (QuestionProviderException ex) {
                     showErrorPage(ex, request, response);

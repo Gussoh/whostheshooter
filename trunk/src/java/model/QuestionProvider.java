@@ -24,11 +24,14 @@ public abstract class QuestionProvider {
      */
     public QuestionProvider(int prefetchSize) {
         questionCache = new LinkedBlockingQueue<Question>(prefetchSize);
+    }
+    
+    public void startNewFetchingThread() {
         new Thread(new PrefetchThread()).start();
     }
 
     public QuestionProvider() {
-        this(10);
+        this(100);
     }
 
     protected abstract Question createQuestion() throws QuestionProviderException;
@@ -51,7 +54,7 @@ public abstract class QuestionProvider {
         public void run() {
             for (;;) {
                 try {
-                    System.out.println("Fetching new question, cache size: " + questionCache.size() + " / " + (questionCache.size() + questionCache.remainingCapacity()));
+                    System.out.println("WhosTheShooter> Fetching new question, cache size: " + questionCache.size() + " / " + (questionCache.size() + questionCache.remainingCapacity()));
                     questionCache.put(createQuestion());
                     lastException = null;
                 } catch (InterruptedException ex) {
@@ -59,7 +62,7 @@ public abstract class QuestionProvider {
                 } catch (QuestionProviderException ex) {
                     lastException = ex;
                     try {
-                        System.out.println("Error, sleeping 5 seconds...");
+                        System.out.println("WhosTheShooter> Error, sleeping 5 seconds...");
                         Thread.sleep(5000);
                     } catch (InterruptedException ex1) {
                     }
