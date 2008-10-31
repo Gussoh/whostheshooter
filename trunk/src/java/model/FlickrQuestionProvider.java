@@ -34,18 +34,16 @@ public class FlickrQuestionProvider extends QuestionProvider {
     private int numberOfMonkeys = 4;
     List<Monkey> errorMonkeys = new ArrayList<Monkey>();
     HashSet<String> errorMonkeyUrls = new HashSet<String>();
-    Flickr f = new Flickr("159ced7ac09b5794485ac8dee1e4be20");
-    PhotosInterface photosInterface;
 
     public FlickrQuestionProvider() {
-        f.setSharedSecret("9c8dc7a2d4967255");
-        photosInterface = f.getPhotosInterface();
     }
 
     @Override
     protected Question createQuestion() throws QuestionProviderException {
         try {
-
+            Flickr f = new Flickr("159ced7ac09b5794485ac8dee1e4be20");
+            f.setSharedSecret("9c8dc7a2d4967255");
+            PhotosInterface photosInterface = f.getPhotosInterface();
 
             PhotoList photoList = null;
             Photo photo = null;
